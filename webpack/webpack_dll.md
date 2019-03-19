@@ -106,6 +106,13 @@ const htmlPlugin = new HtmlWebpackPlugin({
 });
 
 ```
+template.html 
+
+```html
+
+<script type="text/javascript" src="<%= htmlWebpackPlugin.options.vendorName %>"></script>
+
+```
 vendorName就是引用的完整的路径
 
 ****
