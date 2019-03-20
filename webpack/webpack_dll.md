@@ -117,6 +117,192 @@ vendorName就是引用的完整的路径
 
 ****
 
+#### 不足之处
+1. dll中的文件需要锁定版本，不能使用对应的contenthash
+打包的第三方js不能够加上文件名上的hash,可以在每次发新版的时候生成hash拼接query的方式解决,不过这种方式需要另外增加代码，并且多人合作时不一定能有效控制每个包的版本。
+
+2. 两种以上的dll包使用起来麻烦
+
+如果项目中有很多的第三方代码(mvc库，UI库及其相关的库，图表图（一般都很大），相应的poly-fill（兼容性代码）)如果都打包到一起就会是很大的一个文件，这时会通过分开打包让浏览器能够并行下载这些文件的方式来加快加载速度。 下面dll代码会生成相应的三个dll文件 r1,t1,t2. 文件名是contenthash
+
+```javascript
+
+const entry = {
+    // react相关
+    r1: [
+        'react',
+        'react-dom',
+        ...
+    ],
+    // bizchart
+    t1: [
+        'bizcharts',
+    ],
+    // 其他1
+    t2: [
+        'jquery',
+        'moment',
+        'babel-polyfill',
+        'proxy-polyfill'
+    ],
+    // // 其他2
+    // t3: [
+    //     ''
+    // ]
+
+};
+
+
+module.exports = {
+    output: {
+        path: rootPath,
+        filename: 'dll.[name]-[contenthash].js',
+        library: '[name]',
+    },
+    entry,
+
+```
+
+##### 多个文件的dll在build的使用方式,先假设文件名是r1,t1,t2 三个普通的
+
+* 在webpack.config 中的plugin属性上要添加对应的DllReferencePlugin.
+
+```javascipt
+        plugin.push(
+            new Webpack.DllReferencePlugin({
+                    manifest: require(r1的manifest json 的path), // dll 中生成的json 文件
+            }),
+            new Webpack.DllReferencePlugin({
+                    manifest: require(t1的manifest json 的path), // dll 中生成的json 文件
+            }),
+            new Webpack.DllReferencePlugin({
+                    manifest: require(t2的manifest json 的path), // dll 中生成的json 文件
+            })
+        )
+
+```
+* 同时在htmlplugin的配置用需要配置相应的script替换项
+
+```javascipt
+        plugin [
+            new HTMLWebpackPlugin({
+                template: './index.html',
+                r1: 'dll文件夹path/r1.js',
+                t1: 'dll文件夹path/t1.js',
+                t2: 'dll文件夹path/t2.js',
+            });
+        ]
+```
+* 在index.html中添加
+
+```html
+    <script type="text/javascript" src="<%= htmlWebpackPlugin.options.r1%>"></script>
+    <script type="text/javascript" src="<%= htmlWebpackPlugin.options.t1 %>"></script>
+    <script type="text/javascript" src="<%= htmlWebpackPlugin.options.t2 %>"></script>
+```
+
+##### 改进这个使用方式
+
+其实多文件dll的build过程就是，Webpack.DllReferencePlugin中把生成的每个json添加这个插件一次，在html添加上对应的文件名称和路径。
+
+* 第一点可以通过遍历dll包中的json文件写入DllReferencePlugin,walk 方法是遍历文件夹
+```javascipt
+            var getDllConfigs = (dllPath) => {
+        const result = [];
+        var walk = function (dir) {
+            var results = []
+            var list = fs.readdirSync(dir)
+            list.forEach(function (file) {
+                file = dir + '/' + file
+                var stat = fs.statSync(file)
+                if (stat && stat.isDirectory()) results = results.concat(walk(file))
+                else results.push(file)
+            });
+            return results
+        };
+        const dllFiles = walk(dllPath);
+        dllFiles.forEach((filePath) => {
+            if (path.extname(filePath) === '.json') {
+                result.push({
+                    manifest: require(filePath), // dll 中生成的json 文件
+                });
+            }
+        });
+        return result;
+    };
+    getDllConfigs(dll_path).forEach(item => {
+        WebpackBaseConfig.plugins.push(new Webpack.DllReferencePlugin(item))
+    });
+
+ ```
+
+* htmlPlugin 可以通过写一个小插件来完成
+
+```javascript
+        //insert html
+        var fs = require('fs');
+        var path = require('path');
+        var walk = function (dir) {
+        var results = []
+    var list = fs.readdirSync(dir)
+    list.forEach(function (file) {
+        file = dir + '/' + file
+        var stat = fs.statSync(file)
+        if (stat && stat.isDirectory()) results = results.concat(walk(file))
+        else results.push(file)
+    });
+    return results
+};
+
+function insertHtmlDllPlugin(options) {
+    this.options = options;
+}
+
+insertHtmlDllPlugin.prototype.apply = function (compiler) {
+    var self = this;
+    // webpack 4 support
+    compiler.hooks.compilation.tap('insertHtmlDllPlugin', (compilation) => {
+        compilation.hooks.htmlWebpackPluginAfterHtmlProcessing.tapAsync('insertHtmlDllPlugin', (htmlPluginData, callback) => {
+            self.onAfterHtmlProcessing(htmlPluginData, callback);
+        });
+    });
+}
+
+insertHtmlDllPlugin.prototype.onAfterHtmlProcessing = function (htmlPluginData, callback) {
+    var enable = typeof this.options.enable !== 'undefined' ? this.options.enable : true;
+    if (!enable) {
+        return;
+    }
+    var dllPath = this.options.dllPath;
+    if (!dllPath || !fs.existsSync(path.resolve(dllPath))) {
+        throw new Error('dll path don\'t exist');
+    }
+    // 遍历dll文件夹找到对应的js，写入html的header中
+    var dllFiles = walk(dllPath);
+    var scriptsStr = '';
+    var publicPath = this.options.publicPath || '';
+    dllFiles.forEach((filePath) => {
+        const fileName = path.basename(filePath);
+        if(path.extname(filePath) === '.js'){
+            scriptsStr += '<script type="text/javascript" src="' + (publicPath + fileName) + '"></script>';
+        }
+    });
+    //
+    console.log(this.options);
+
+    htmlPluginData.html = htmlPluginData.html.replace('</head>', scriptsStr + '</head>');
+    callback(null, htmlPluginData);
+};
+
+module.exports = insertHtmlDllPlugin;
+
+```
+将所有的js写入head 标签中
+
+3. 不能很好地支持异步的文件(也许是没研究出来)
+
+
+
 ##### 参考链接
 
 1.[DllPlugin](https://webpack.docschina.org/plugins/dll-plugin/)
