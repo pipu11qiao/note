@@ -9,6 +9,7 @@
 #### 准备 
 
 项目中安装 react-loadble ,babel插件安装 syntax-dynamic-import. react-loadable是通过webpack的异步import实现的
+如果要实现非页面的组件加载，首先要在webpack配置中将相应的代码块分离出来,splitchunk!!!
 
 ##### react-loadable的基本使用和概念,其中import中的webpackChunkName是异步文件的文件名。
 
@@ -185,9 +186,8 @@ export default getBizcharts(Index);
 
 #### bScroll 等非react组件
 
-
-
-
+如果该类组件的export 是一个单独的构造,就是在render的时候出入 loaded.default 
+如果是一个集合，可以直接出入，在使用的组件中获取
 
 
 
