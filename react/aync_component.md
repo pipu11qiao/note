@@ -1,15 +1,15 @@
 ### React 通过react-loadable实现异步组件
 
-在一般的react项目中在性能优化方面除了减少各种静态资源的体积外，还有一个效果显著的方式，异步加载组件，包括页面级组件（在路由中配置的），以及其他的体积较大的第三方组件（bizchart,bScrooll,...),本文会详细说明结合react-loaable三种异步组件的实现:
+在一般的react项目中在性能优化方面除了减少各种静态资源的体积外，还有一个效果显著的方式，异步加载组件，包括页面级组件（在路由中配置的），以及其他的体积较大的第三方组件（bizcharts,bScroll,...),本文会详细说明使用react-loaable来实现三种异步组件:
 
 1. 页面级组件(router.js引用的组件)，普通的react组件
-2. bizchart 组合的react组件
-3. bScroll 等非典型react组件
+2. bizcharts 组合的react组件
+3. bScroll 等非典型react组件（第三方类库）
 
 #### 准备 
 
 项目中安装 react-loadble ,babel插件安装 syntax-dynamic-import. react-loadable是通过webpack的异步import实现的
-如果要实现非页面的组件加载，首先要在webpack配置中将相应的代码块分离出来,splitchunk!!!
+如果要实现非页面的组件加载，首先要在webpack配置中将相应的代码块分离出来,splitchunk!!! (例如，bizcharts 等代码库，需要在splitchunk中给个单独配置)
 
 ##### react-loadable的基本使用和概念,其中import中的webpackChunkName是异步文件的文件名。
 
