@@ -1,4 +1,4 @@
-#### [翻译] grep command in Unix/Linux 
+## [翻译] grep command in Unix/Linux 
 
 grep (gloabally search for regular expression and print out) 过滤器在一个文件中搜索由字符组成的特定的表达式并且展示所有匹配表达式的行。在搜索过程中这个表达式会被处理成正则表达式使用。
 
