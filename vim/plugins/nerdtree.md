@@ -1,9 +1,14 @@
 ## NERDTree 的一些功能
 
+* 打开/关闭 以.开头的文件的显示,快捷键 **I**。
+
+
 #### nerdtree menu 功能提供了一些文件操作的功能，方便在vim中创建/移动/重命名/删除文件和文件夹
 在nerdtree 窗口先要操作的文件夹或文件上键入**m**,调出菜单小窗口，使用j/k和enter键，或者键入缩写来选择对应的操作
 
-NERDTree Menu. Use j/k/enter . or the shortcuts indicated
+
+ NERDTree Menu. Use j/k/enter . or the shortcuts indicated
+
 =========================================================
   (a)dd a childnode 添加一个子节点
   (m)ove the current node 移动或重命名一个子节点
@@ -14,6 +19,7 @@ NERDTree Menu. Use j/k/enter . or the shortcuts indicated
   (c)opy the current node 复制该节点
   copy (p)ath to clipboard 复制节点路径
   (l)ist the current node 查看该节点
+
 #### nergtree 部分快捷键 默认设置 
 
 快捷键 | 描述
