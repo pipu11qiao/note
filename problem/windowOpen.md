@@ -8,7 +8,7 @@
 
 * a标签，请求后给修改href。
 * 通过创建新的a标签并触发点击。
-* 通过setTimeout('oepn',500)的方式，也不好用
+* 通过setTimeout('open',500)的方式，也不好用
 
 ### 最终解决方案 ###
 
@@ -18,17 +18,29 @@
 
 $(document.body).on('click', '.btn', function() {
     var tempWin = window.open(tempUrl, '_black ');
-    $.get(requetUrl, function() {
+    $.get(requestUrl, function() {
         tempWin.location.href = realUrl
     })
 });
 
 ```
-但是这有个问题是只能打开一个窗口，查看window.open的文档 [window.oepn](https://developer.mozilla.org/en-US/docs/Web/API/Window/open)
+但是这有个问题是只能打开一个窗口，查看window.open的文档 [window.open](https://developer.mozilla.org/en-US/docs/Web/API/Window/open)
 
 > var window = window.open(url, windowName, [windowFeatures]);
 
 其中windowName标识打开窗口的浏览上下文？，如果没有找到当前windowName将会创建新的窗口，就是可以通过随机生成这个来达到打开新窗口目的。
+
+```javascript
+var c = 1;
+$(document.body).on('click', '.btn', function() {
+    var tempWin = window.open(tempUrl, 'name' + (c++), '_black ');
+    $.get(requestUrl, function() {
+        tempWin.location.href = realUrl
+    })
+});
+
+```
+
 
 * 提前获取地址，这样就不是在点击的时候异步获取了。 其实能不用异步就不用异步，和后台小哥商量下吧。
 
