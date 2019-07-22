@@ -41,9 +41,9 @@ chrome,safari都直接被下载
 #### Content-Disposition 属性
 
 在普通的HTTP响应中 **Content-Disposition**可以作为响应头用来表明该响应内容是要在浏览器中内联(inline)显示，如作为一个网页或者网页的一部分展示,还是作为附件(attachment)，被下载和本地保存。
-在内容类型为multipart/form-data的响应体,**Content-Disposition**可以作为普通头部属性，用来作为文件流报文的子组成部分来提供响应相应的信息。这些字组成部分，被Content-Type顶一个的boundary字段分割，他们对报文实体没有影响。
+在内容类型为multipart/form-data的响应体,**Content-Disposition**可以作为普通头部属性，用来作为文件流报文的子组成部分来提供响应相应的信息。这些子组成部分，被Content-Type中的boundary字段分割，他们对报文实体没有影响。
 
-在服务器端端进行设置(node代码）
+在服务器端进行设置(node代码）
 
 ```javascript
         if(filePath.indexOf('download') > -1){
@@ -60,7 +60,7 @@ chrome,safari都直接被下载
 
 可以看到除了微信浏览器其他浏览器都能正确的下载文件
 ##### 解决方法
-通过相关搜索发现微信屏蔽了内置浏览器的下载功能(真是无语,你一个浏览器能改变用户习惯么),所以看到很多app或软件在微信浏览器打开的时候提示别的浏览器打开该页面。
+通过相关搜索发现微信屏蔽了内置浏览器的下载功能(真是无语,你一个浏览器能改变用户习惯么),所以看到很多app或软件在微信浏览器打开的时候提示在别的浏览器打开该页面。
 
 #### 总结
 
