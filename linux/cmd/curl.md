@@ -48,7 +48,7 @@ curl ftp://ftp.example.com/file[1-20].jpeg
     curl -o [file_name] [URL...]
 
     ```
-* -C: - 这个选项会继续下载哪些因为其他原因停止的下载。对于现在大文件和被打断的很有用
+* -C: - 这个选项会继续下载那些因为其他原因停止的下载。对于现在大文件和被打断的很有用
     ```
     curl -O [URL...]
 
@@ -63,7 +63,7 @@ curl ftp://ftp.example.com/file[1-20].jpeg
     curl -u {username}:{password} [FTP_URL]
 
     ```
-* -T: 该选项想ftp服务器上传文件
+* -T: 该选项向ftp服务器上传文件
     ```
     curl -u {username}:{password} -T {filename} {FTP_Location}
 
