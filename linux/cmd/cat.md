@@ -7,7 +7,7 @@ cat命令最重要的点是能够将文件输出到控制台的标准输出中�
 
 * -b 或 --number-nonblank：和 -n 相似，只不过对于空白行不编号。
 
-* -s 或 --squeeze-blank：当遇到有连续两行以上的空白行，就代换为一行的空白行。
+* -s 或 --squeeze-blank：当遇到有连续两行以上的空白行，就替换为一行的空白行。
 
 * -v 或 --show-nonprinting：使用 ^ 和 M- 符号，除了 LFD 和 TAB 之外。
 
