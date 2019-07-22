@@ -1,6 +1,6 @@
 ### React 通过react-loadable实现异步组件
 
-在一般的react项目中在性能优化方面除了减少各种静态资源的体积外，还有一个效果显著的方式，异步加载组件，包括页面级组件（在路由中配置的），以及其他的体积较大的第三方组件（bizcharts,bScroll,...),本文会详细说明使用react-loaable来实现三种异步组件:
+在一般的react项目中在性能优化方面除了减少各种静态资源的体积外，还有一个效果显著的方式，异步加载组件，包括页面级组件（在路由中配置的），以及其他的体积较大的第三方组件（bizcharts,bScroll,...),本文会详细说明使用react-loadable来实现三种异步组件:
 
 1. 页面级组件(router.js引用的组件)，普通的react组件
 2. bizcharts 组合的react组件
@@ -8,7 +8,7 @@
 
 #### 准备 
 
-项目中安装 react-loadble ,babel插件安装 syntax-dynamic-import. react-loadable是通过webpack的异步import实现的
+项目中安装 react-loadable ,babel插件安装 syntax-dynamic-import. react-loadable是通过webpack的异步import实现的
 如果要实现非页面的组件加载，首先要在webpack配置中将相应的代码块分离出来,splitchunk!!! (例如，bizcharts 等代码库，需要在splitchunk中给个单独配置)
 
 ##### react-loadable的基本使用和概念,其中import中的webpackChunkName是异步文件的文件名。
@@ -36,7 +36,7 @@ const AsyncList = Loadable({
 
 * loading 是一个接受状态对象的函数，isLoading和error属性，通过这两个属性来返回相应的过渡组件
 * loader 是一个返回import()调用的函数
-* render 如果loader中只是个普通的react组件这个办法不需要用到，但是如果加载的js或者组件时一个组件的集合就需要用到，其中loaded是加载的文件的export结果，props 是Loadable函数返回组件接收的参数。 
+* render 如果loader中只是个普通的react组件这个办法不需要用到，但是如果加载js或者组件时一个组件的集合就需要用到，其中loaded是加载的文件的export结果，props 是Loadable函数返回组件接收的参数。 
 
 ```javascript
     const A = Loadable({
@@ -154,7 +154,7 @@ export const getBizcharts = (ReactComponent) => Loadable({
 
 ```
 
-这事图表组件的样子：
+这是图表组件的样子：
 
 ```javascript
 import React from 'react';
