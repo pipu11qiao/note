@@ -18,7 +18,7 @@ if(isMemoryFs) {
     const fs = compiler.outputFileSystem = new MemoryFileSystem();
 
 ```
-这个fs实例也是webapck的输出fs，可以访问到dev-serber中的文件。
+这个fs实例也是webapck的输出fs，可以访问到dev-server中的文件。
 
 #### 在开发中需要的需求是，在dev环境下能够将user信息渲染到页面中
 
