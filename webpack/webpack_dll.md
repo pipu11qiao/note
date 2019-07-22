@@ -60,7 +60,7 @@ module.exports = {
 
 2.在正常生产打包过程中,通过DllReferencePlugin将打包好的库和剩下的需要编译的代码在module依赖上结合起来
 
-webpack.config.js 中pluging 配置，注意只需在生产环境配置这插件
+webpack.config.js 中plugin 配置，注意只需在生产环境配置这插件
 ```javascipt
 
     plugins: [
@@ -70,7 +70,7 @@ webpack.config.js 中pluging 配置，注意只需在生产环境配置这插件
     ],
 
 ```
-在没有添加这个plugin的时候，build过程用时4767ms,打包200个module,budle.js 大小201kb
+在没有添加这个plugin的时候，build过程用时4767ms,打包200个module,bundle.js 大小201kb
 添加DllReferencePlugin后, 用时3195ms,打包175个module, bundle.js 大小41kb
 打包完的html
 
@@ -123,7 +123,7 @@ vendorName就是引用的完整的路径
 
 2. 两种以上的dll包使用起来麻烦
 
-如果项目中有很多的第三方代码(mvc库，UI库及其相关的库，图表图（一般都很大），相应的poly-fill（兼容性代码）)如果都打包到一起就会是很大的一个文件，这时会通过分开打包让浏览器能够并行下载这些文件的方式来加快加载速度。 下面dll代码会生成相应的三个dll文件 r1,t1,t2. 文件名是contenthash
+如果项目中有很多的第三方代码(mvc库，UI库及其相关的库，图表库（一般都很大），相应的poly-fill（兼容性代码）)如果都打包到一起就会是很大的一个文件，这时会通过分开打包让浏览器能够并行下载这些文件的方式来加快加载速度。 下面dll代码会生成相应的三个dll文件 r1,t1,t2. 文件名是contenthash
 
 ```javascript
 
@@ -181,7 +181,7 @@ module.exports = {
         )
 
 ```
-* 同时在htmlplugin的配置用需要配置相应的script替换项
+* 同时在htmlplugin的配置中需要配置相应的script替换项
 
 ```javascipt
         plugin [
