@@ -65,5 +65,31 @@ endsnippet
 
 这是一级标题的snippet,如果有选中内容就把选中的内容（没有选中则有默认值标题）放到两个‘#’之间，因为tabstop$1的关系，内容会被置为选中状态，这时标题内容可以被编辑。再次按下tab键。光标会跳转到#后。
 
+### 代码块snnipet ###
+
+markdown 的语法是\`\`\`\`\`\`，如果在第三个反引号的后面加上代码块使用的语言可以让编辑器增加语法高亮方便阅读,如html、javascript等,下面来通过书写一个正则匹配的snippet。
+
+要实现输入cd，生成代码块，cd + (js/html/css)来让代码块后面标识上javascript html css的语言标识,我们需要写一个匹配这种情况的正则，cd(\w+)?。然后通过写一小段python代码获得匹配的结果，通过判断匹配的词来写入语言。
+
+```vim
+
+snippet "cd(\w+)?" "Codeblock With Lan" br
+\`\`\``!p
+if match.group(1) == "html":
+	snip.rv="html"
+elif match.group(1) == "css":
+	snip.rv="css"
+elif match.group(1) == "js":
+	snip.rv="javascript"
+`
+$1
+\`\`\`
+$0
+endsnippet
+
+```
+
+反引号\`\`,后接!p说明是python语句，在python代码块中 match是有正则的情况下的匹配结果。snip.rv 赋值就是返回该代码块的结果（根据cd后面的单词判断并输出代码块的语言）。
+
 
 
