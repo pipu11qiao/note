@@ -6,3 +6,19 @@
 #### git从某次提交拉分支
 
 > git checkout -b branchname <commitId>
+
+#### 查看某个commit的改动 ####
+
+```
+
+git show COMMIT
+
+```
+或者
+
+```
+
+git diff COMMIT
+
+```
+
