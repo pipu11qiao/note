@@ -1,69 +1,3 @@
-#### shell
-
-shell 就是用来通过控制 kernel(核心)和它提供给工具来控制kernel,从层次上分，shell是介于用户和kernal中间沟通的桥梁。
-
-bash (Bourne Again Shell),第一个流行的shell由StevenBourne发展来的，成为Bourne shell。简称 sh。 另一个广为流传的是 Boll Joy 设计的 C shell，简称csh。
-
-查看一下 /etc/shells这个档案
-
-* /bin/sh (已被bash取代)
-* /bin/bash (linux 预设的shell)
-* /bin/ksh (Kornshell 由AT & T Bell lab 发展出来，兼容bash)
-* /bin/tcsh （整合 C shell）
-* /bin/csh (已被tcsh取代)
-* /bin/zsh (基于ksh，更强大的shell)
-
-这些shell功能都差不多，语法上不太一样。以bash和csh为主要的shell。当用户登录系统是，登入时使用的shell记录在/etc/passwd档案中。
-
-#### Bash shell 的功能 ####
-
-bash的主要优点：
-
-* 命令编辑能力
-    bash 可以记录使用过的指令，通过上下键就能找到前面使用的指令。 ~/.bash_history 记录，记录的是前一次登入以前所执行过得指令。当前登入所执行的指令会暂存在内存中，当注销系统后会被记录到.bash_history中。类似的有.zsh_history。为了安全性考虑，应当减少允许记录的历史次数。
-* 命令与档案补全功能
-    tab键可以方便的补全命令或者档案，是一个很好的习惯。可以让你1）少打很多字，2）保证输入的数据的准确性，tab命令的补全功能依据按键所在的指令位置变化.
-
-    * tab 接在一串指令的第一个字的后面，则为命令补全;
-    * tab 接在一串指令的第二个字以后时，则为档案补齐;
-* 命令别名（alias）设置功能
-    可以通过设置命令别名来简化或者丰富现有命令的使用。如查看目录下所有档案和档案属性，需要输入ls -al,通过如下别名
-
-    ```
-    alias lm='ls -al'
-
-    ```
-    就可以通过lm命令来实现该功能了。
-* 工作控制（jobs）、前景背景控制
-     使用前、背景的控制可以让工作进行的更为顺利!至于工 作控制(jobs)的用途则更广，可以让我们随时将工作丢到背景中执行!而不怕不小心使用了 Ctrl + c 来 停掉该程序!
-* Shell scripts 的强大功能
-    将日常生活中下达的连续指令写成一个档案。类似于小型的程序序言，可以和主机对谈交互，也可以执行相关指令。
-* 万用字符
-    bash 支持很多的万用字符来帮助使用者查询和下达指令。 如查看当前目录下所有的markdown档案
-
-    ```
-    ls -l *.md
-    ```
-#### Bash shell 内建命令：type ####
-
-man bash 命令查看到的说明文件中有很多如cd的那个命令的介绍，这些是内建命令。可以用 **type**命令来查看命令是否是内建命令。
-
-语法：
-
-```
-type [-tpa] cmd_name
-
-```
-参数说明：
-
-* 不加任何参数时，则 type 会显示出那个 name 是外部指令还是 bash 内建的指令
-* -t 当加入 -t 参数时，type 会将 name 以底下这些字眼显示出他的意义:
-    * file :表示为外部指令;
-    * alias :表示该指令为命令别名所设定的名称;
-    * builtin :表示该指令为 bash 内建的指令功能;
-* -p 如果后面接的 name 为指令时，会显示完整文件名(外部指令)或显示为内建指令;
-* -a 会将由 PATH 变量定义的路径中，将所有含有 name 的指令都列出来，包含 alias
-
 #### Shell 的变量功能 ####
 举例来说系统中程序使用邮箱(Mail)路径，用户不同邮箱路径也会不一样，tom的邮箱路径是 /var/spool/mail/tom,而emmy的邮箱路径是 /var/spool/mail/emmy,通过设置变量程序只需要访问该变量来获取每个用户的邮箱路径，不用存储每个用户的邮箱路径。
 
@@ -198,7 +132,178 @@ $ <== 目前这个 shell 所使用的 PID
 
 ```
 * $ 目前这个shell的执行绪代号，也可称为PID（Process ID）
-* ? (上个执行指令的回传码)般来说，如果成功的执行该指令， 则会回传一个 0 值，如果执行过程发生错误，就会回传错误代码才对
+* ? (上个执行指令的回传码)般来说，如果成功的执行该指令， 则会回传一个 0 值，如果执行过程发生错误，就会回传错误代码。
+
+##### 自定义变量转成环境变量： export #####
+自定义变量和环境变量的区别在于变量是否可以被子程序所引用。
+
+在在一个bash中，再次执行bash命令，会重新打开一个bash（子程序），父级程序中的变量将不能引用，能引用的只有环境变量。
+
+如果想把自定义变量转为环境变量执行
+```
+export 变量
+```
+若果后面不接参数，export命令会将所有的环境变量列出来。
+
+##### 语系变量 #####
+
+??
+
+##### 变量的有效范围 #####
+出了父程序和子程序之间的变量的引用范围，还有两个shell脚本之间的变量范围，比如script2想引用script1中的变量，那个该变量之前就需要加export关键字。
+
+环境变量可以让子程序继续引用的原因：
+
+* 当启动一个 shell ，操作系统分配一记忆区块给 shell 使用，此区域之变量可以让子程序存取;
+* * 利用 export 功能，可以让变量的内容写到上述的记忆区块当中(环境变量);
+* 当加载另一个 shell 时 (亦即启动子程序，而离开原本的父程序了)，子 shell 可以将父 shell 的环境变量所在的记忆区块导入自己的环境变量区块当中。
+
+##### 变量键盘读取、数组和宣告 #####
+让使用者能够经由键盘输入。可以设定该变量的数据类型，例如是数组还是数字等。
+
+* read
+    语法
+    ```
+    read [-pt] variable
+    ```
+    read + 变量名，然后会有一个空白行，等待用户输入完毕。输入的内容就是该变量的内容。
+    参数：
+    * -p: 后面可以接提示字符!
+    * -t: 后面可以接等待的『秒数!』这个比较有趣~不会一直等待使用者啦!
+```
+# read atest
+thi is a test
+# echo $atest
+thi is a test
+#
+
+```
+
+* declare / typeset
+    declare 或 typeset 是一样的功能，就是在宣告变量的属性。
+    语法：
+    ```
+    declare [-aixr] variable
+    ```
+    * -a: 将后面的 variable 定义成为数组 (array)
+    * -i: 将后面接的 variable 定义成为整数数字 (integer)
+    * -x :用法与 export 一样，就是将后面的 variable 变成环境变量;
+    * -r :将一个 variable 的变量设定成为 readonly ，该变量不可被更改内容，也不能 unset
+```
+# sum=100+300+50
+# echo $sum
+100+300+50
+# declare -i sum=100+300+50
+# echo $sum
+450
+#
+```
 
 
+* 数组属性array说明
 
+    数组的设定方式是: var[index]=content
+    建议直接以 ${数组} 的方式来读取
+```
+# var[1]="aaa"
+# var[2]="bbb"
+# var[3]="ccc"
+# echo "${var[1]},${var[2]},${var[3]}"
+aaa,bbb,ccc
+#
+```
+* 与档案系统及程序的限制关系: ulimit
+bash可以限制使用者某些系统资源，如开启的档案数量
+```
+ulimit [-SHacdflmnpstuv] [配额]
+```
+
+* 额外的变量设定功能
+两种变量的取用方式
+
+```
+echo $HOME
+echo ${HOME}
+```
+使用${variable}的方式中，可以做一些变量的修订工作,下面的例子中，变量名为tom，内容为/home/tom/testing/tesing.x.sh
+1. 设定变量
+```
+# tom="/home/tom/testing/tesing.x.sh"
+# echo ${tom}
+/home/tom/testing/tesing.x.sh
+#
+```
+2. tom变量中，从头开始比对给定的表达式\/\*\/,其中*表示任意字符，满足就删除
+```
+# echo ${tom##/*/}
+tesing.x.sh <==删除了 /home/tom/testing/
+# echo ${tom#/*/}
+tom/testing/tesing.x.sh <==仅删除 /home/ 而已
+#
+```
+ 这两个小例子有趣了~变量名称后面如果接了两个 ## ，表示在 ## 后面的字符串取最长的那一段;如果仅有一个 # ，表示取最小的那一段
+
+3. 如果是从后面开始，删除 /* 呢?
+```
+# echo ${tom%%/*/}
+/home/tom/testing/tesing.x.sh <==都没被删除
+# echo ${tom%%/*}
+  <==被删除光了!
+# echo ${tom%/*}
+/home/tom/testing <==只删除 /testing.x.sh 部分
+#
+```
+这个例子当中需要特别注意，那个 % 表示从后面开始,%%表示最长的,%表示最短的
+
+4.将变量中的tesing变为TEST
+```
+# echo ${tom/testing/TEST}
+/home/tom/TEST/testing.x.sh
+# echo ${tom//testing/TEST}
+/home/tom/TEST/TEST.x.sh
+#
+```
+如果变量后面接的是 / 时，那么表示后面是进行『取代』的工作~而且仅取代『第一个』 # 但如果是 // ，则表示全部的字符串都取代
+
+目前我需要用到两个变量，分别是 var 与 str ， 那我想要针对 str 这个变量内容是否有设定成一个字符串，亦即 "expr" 来决定 var 的内容。
+变量设定方式| str 没有设定| str 为空字符串| str 已设定非为空字符串
+--|--|--|--
+ var=${str-expr}| var=expr|var=|var=$str
+ var=${str:-expr}| var=expr | var=expr | var=$str
+ var=${str+expr} | var=expr | var=expr | var=expr
+ var=${str:+expr} | var=expr | var= | var=expr
+ var=${str=expr} |str=expr var=expr |str 不变 var= str 不变 | var=$str
+ var=${str:=expr} |str=expr var=expr |str=expr  var=expr| str 不变 var=$str
+ var=${str?expr} |expr 输出至 stderr | var= | var=str
+ var=${str:?expr} |expr 输出至 stderr| expr 输出至 stderr | var=str
+
+ 练习:
+ 1. 若 str 这个变量内容存在，则 var 设定为 str ，否则 var 设定为 "newvar"
+ ```
+# unset str;var=${str-newvar}
+# echo var="$var",str="$str"
+var=newvar,str=       <==因为 str 不存在，所以 var 为 newvar
+# str="oldvar";var=${str-newvar}
+# echo var="$var",str="$str"
+var=oldvar,str=oldvar    <==因为 str 存在，所以 var 等于 str 的内容
+#
+ ```
+ 2. 若 str 不存在，则 var 与 str 均设定为 newvar，否则仅 var 为 newvar
+ ```
+# unset str; var=${str=newvar}
+# echo var="$var",str="$str"
+var=newvar,str=newvar <==因为 str 不存在，所以 var/str 均为 newvar
+# str="oldvar";var=${str=newvar}
+# echo var="$var",str="$str"
+var=oldvar,str=oldvar <==因为 str 存在，所以 var 等于 str 的内容
+#
+ ```
+3. 若 str 这个变量存在，则 var 等于 str ，否则输出 "novar"
+```
+# unset str; var=${str?novar}
+zsh: str: novar <==因为 str 不存在，所以输出错误讯息
+# str="oldvar"; var=${str?novar}
+# echo var="$var",str="$str"
+var=oldvar,str=oldvar  <==因为 str 存在，所以 var 等于 str 的内容
+#
+```
