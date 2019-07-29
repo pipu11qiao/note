@@ -40,5 +40,17 @@ ln [original filename] [link name]
 ln -s  [original filename] [link name]
 ```
 
+#### ln 命令的使用 ####
+
+##### 语法 #####
+
+```
+ln [OPTION]... [-T] TARGET LINK_NAME   (方法1)
+ln [OPTION]... TARGET... DIRECTORY     (方法2)
+ln [OPTION]... -t DIRECTORY TARGET...  (方法3)
+```
+
+
+
 
 
