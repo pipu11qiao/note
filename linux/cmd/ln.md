@@ -50,6 +50,58 @@ ln [OPTION]... TARGET... DIRECTORY     (方法2)
 ln [OPTION]... -t DIRECTORY TARGET...  (方法3)
 ```
 
+**方法1：** 这个用法很简单，需要列出链接的资源文件和链接名称
+
+现有一个内容为`hello world`的a.txt文件，为其创建链接：
+
+```
+# ls
+a.txt
+# cat a.txt
+hello world
+# ln a.txt link.txt
+# ls -lhr
+total 16
+-rw-r--r--  2 wangyong  staff    12B  7 30 09:27 link.txt
+-rw-r--r--  2 wangyong  staff    12B  7 30 09:27 a.txt
+# cat link.txt
+hello world
+#
+
+```
+
+**方法2：** 这个用法，需要列出资源文件和放置链接的文件夹，链接名称和源文件名称一样。
+
+```
+# ls
+a.txt   b.txt   c.txt   linkDir
+# ls linkDir
+# ln a.txt b.txt c.txt linkDir
+# ls linkDir
+a.txt b.txt c.txt
+#
+```
+可以看出资源文件可以使一个也可以是多个，名称和原文件名称一样
+
+
+**方法3：** 这个用法是将方法2中的资源文件和目标文件夹互换
+
+##### 常用选项 #####
+
+* -v: 这个选项可以让你在创建链接的过程中看到哪个链接对应哪个文件。
+
+```
+# ln -v  a.txt b.txt c.txt linkDir
+linkDir/a.txt => a.txt
+linkDir/b.txt => b.txt
+linkDir/c.txt => c.txt
+#
+
+```
+
+
+
+
 
 
 
