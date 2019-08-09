@@ -1,4 +1,3 @@
-
 ## React Portal ##
 Portals 提供了一个最好的在父组件包含的DOM结构层级外的DOM节点渲染组件的方法。
 
@@ -40,5 +39,76 @@ render(){
 #### 在protal中的事件冒泡 ####
 
 虽然通过portal渲染的元素在父组件的盒子之外，但是渲染的dom节点仍在React的元素树上，在那个dom元素上的点击事件仍然能在dom书中监听到。
+
+```javascript
+
+import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+
+const getDiv = () => {
+    const div = document.createElement('div');
+    document.body.appendChild(div);
+    return div;
+};
+
+const withPortal = (WrappedComponent) => {
+    class AddPortal extends Component {
+        constructor(props) {
+            super(props);
+            this.el = getDiv();
+        }
+
+        componentWillUnmount() {
+            document.body.removeChild(this.el);
+        }
+
+        render(props) {
+            return ReactDOM.createPortal(<WrappedComponent {...props} />, this.el);
+        }
+    }
+    return AddPortal;
+};
+
+class Modal extends Component {
+    render() {
+        return (
+            <div>
+                <div>amodal content</div>
+                <button type="button">Click</button>
+            </div>
+        );
+    }
+}
+
+const PortalModal = withPortal(Modal);
+
+class Page extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { clicks: 0 };
+        this.handleClick = this.handleClick.bind(this);
+    }
+
+    handleClick() {
+        this.setState(state => ({
+            clicks: state.clicks + 1
+        }));
+    }
+
+
+    render() {
+        return (
+            <div onClick={this.handleClick}>
+                <h3>ppppppppp</h3>
+                <h3>num: {this.state.clicks}</h3>
+                <PortalModal />
+            </div>
+        );
+    }
+}
+
+export default Page;
+
+```
 
 
