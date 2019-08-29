@@ -21,4 +21,10 @@
 #### 查看某个文件的改动
 `git log -p filename`
 
+#### 查看某个commit 属于某个分支
+
+* `git branch --contains CommitID` 查看本地分支中含有某个commit的分支
+* `git branch -r --contains CommitID` 查看远程分支中含有某个commit的分支
+* `git branch -a --contains CommitID` 查看所有分支中含有某个commit的分支
+
 
