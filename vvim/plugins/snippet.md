@@ -280,6 +280,16 @@ esac
 
 竟像是tabstop的重复。
 
+#### js的一些snippet
+
+* 打印某一个变量
+```
+snippet clw "console.log"
+	console.log('${1}',${2:$1});
+
+```
+
+
 
 
 #### 参考链接
