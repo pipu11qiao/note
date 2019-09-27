@@ -27,4 +27,21 @@
 * `git branch -r --contains CommitID` 查看远程分支中含有某个commit的分支
 * `git branch -a --contains CommitID` 查看所有分支中含有某个commit的分支
 
+#### 添加文件和commit在一个命令中使用别名属性
+* 通过命令行配置:
+
+```bash
+git config --global alias.ac '!git add -A && git commit -m'
+```
+* 通过文件配置
+
+```config
+...
+[alias]
+    ac = !git add -A && git commit -m
+...
+
+```
+
+
 
