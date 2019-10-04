@@ -8,7 +8,7 @@ The dot command is our starting point. This seemingly simple command is the most
 
 # Tip 1 Meet The Dot Command #
 
-The dot command lets us repeat the last change. It is the most powerful and verstile command in Vim.
+The dot command lets us repeat the last change. It is the most powerful and versatile command in Vim.
 
 # Tip 2 Don't Repeat Yourself #
 

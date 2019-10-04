@@ -34,6 +34,18 @@ When we use the dot command to repeat a Visual mode command, it acts on the same
 
 # Tip 23 Prefer Operators to Visual Commands Where Possible #
 
+# Tip 24 Edit Tabular Data with Visual-Block Mode #
+
+replace every character in that line with a dash character (Vr-).
+
+# Tip 25 Change Columns of Text #
+
+We can use Visual-Block mode to insert text into several lines of text simultaneously.
+
+we extend our selection to the end of each line by pressing $. At first glance, one might expect this to cause difficulty because each line is a different length. But in this context, Vim understands that we want to extend our selection to the end of all selected lines.
+
+
+
 
 
 
