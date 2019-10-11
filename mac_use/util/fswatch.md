@@ -34,7 +34,7 @@ fswatch -0 a.js | while read -d "" event ;  do echo ${event}; done
 如果是需要在一系列的变化事件被打印到标准输出时执行某一个命令，并且对事件细节并不关心,这时可以使用下面的命令：
 
 ```
-$ fswatch -o path | xargs -n1 -I{} program
+$ fswatch -o path | xargs -n1  program
 ```
 
 #### 常用参数 ####
