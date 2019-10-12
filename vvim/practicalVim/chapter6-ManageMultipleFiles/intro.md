@@ -78,13 +78,48 @@ The buffer representing a.txt is annotated with a + sign, which indicates that i
 
 vim allows us to view multiple buffers side by side by dividing our workspace into split windows.
 
+<C-w>s divide this window horizontally
+<C-w>v split the window vertically
 
+Command | Effect
+-- | --
+<C-w>s | Split the current window horizontally, reusing the current buffer in the new window
+<C-w>v | Split the current window vertically, reusing the current buffer in the window
+:sp[lit] {file} | split the current window horizontally, loading {file} into new window
+:vsp[lit] {file} | split the current window vertically, loading {file} into the new window
 
+#### changing the focus between windows ####
 
+<C-w>w Cycle between open windows
+<C-w>h left
+<C-w>j down
+<C-w>k up
+<C-w>l right
 
+#### closing window ####
+ex command | normal command | effect 
+-- | -- | --
+:clo[se] <C-w>c close the active window
+:on[ly] <C-w>o keep only the active window, closing all others
 
+#### resizing rearranging window ####
 
+keystokes | buffer contents
+-- | --
+<C-w>= | equalize width and height of all windows
+<C-w>_ | maximize height of the active window
+<C-w>| | Maximize width of the active window
+[N]<C-w>_ | set active window height to [N] window
+[N]<C-w>| | set active window width to [N] window
 
+# organize you window layouts with tab pages #
+
+Vim’s tabbed interface is different from that of many other text editors. We can use tab pages to organize split windows into a collection of workspaces.
+when we open a file using the :edit command, Vim doesn't automatically create a new tab. Instead, it creates a new buffer and load it into the current window.
+
+#### how to use tabs ####
+
+vim's tab pages can be used to partition work itno different workspaces. 
 
 
 
