@@ -122,6 +122,10 @@ when we open a file using the :edit command, Vim doesn't automatically create a 
 vim's tab pages can be used to partition work itno different workspaces. 
 
 
+The :lcd {path} command lets us set the working directory locally for the current window. If we create a new tab page and then use the :lcd command to switch to another directory, we can then comfortably scope each tab page to a differ- ent project. Note that :lcd applies locally to the current window, not to the current tab page. If we have a tab page containing two or more split windows, we could set the local working directory for all of them by running :windo lcd {path}. Check out episode 9 of Vimcasts for more information.3
+
+
+
 
 
 
