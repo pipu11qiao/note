@@ -42,6 +42,12 @@ git config --global alias.ac '!git add -A && git commit -m'
 ...
 
 ```
+#### 使用特定分支上的文件替换当前分支上的文件
+
+```
+git checkout sourc_branch <paths>...
+```
+
 
 
 
