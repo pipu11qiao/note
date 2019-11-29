@@ -217,3 +217,168 @@ org.cups.cupsd.path                        enabled
 
 我们将在涉及到时展开“masked”的解释。
 
+#### 单元管理 ####
+
+目前为止，我们已经实践了服务相关和展示**systemd**知道的单元和单元文件的信息。我们可以使用一些其他的命令来查找找出更多的特定信息。
+
+#### 展示一个单元文件 ####
+
+要展示一个被**systemd**加载进其系统的单元文件，你可以使用**cat**命令。例如，查看**atd**计划守护进程，我们可以键入：
+
+```
+systemctl cat atd.service
+```
+
+```
+[Unit]
+Description=ATD daemon
+[Service]
+Type=forking
+ExecStart=/usr/bin/atd
+[Install]
+WantedBy=multi-user.target
+
+```
+
+输出的结果是被当前运行的**systemd**进程所知道的单元文件内容，如果你最近修改了单元文件内容或正在重写一个单元文件片段的内容，知道这点很重要。（我们在后续会涉及到）
+
+##### 展示依赖 #####
+
+查看一个单元的依赖树，你可以使用**list-dependencied**命令：
+
+```
+systemctl list-dependencies sshd.service
+```
+
+这将展示一个分层的那些为了开启讨论中单元时必须处理的依赖关系图。这些依赖，在当前语境下，包括那些直接被需要程序需要以及启动这些程序的上一级的依赖程序。
+
+```
+sshd.service
+├─system.slice
+└─basic.target
+  ├─microcode.service
+  ├─rhel-autorelabel-mark.service
+  ├─rhel-autorelabel.service
+  ├─rhel-configure.service
+  ├─rhel-dmesg.service
+  ├─rhel-loadmodules.service
+  ├─paths.target
+  ├─slices.target
+. . .
+```
+
+递归的依赖只展示到**.target**单元，这些单元用来指示系统的状态。若要递归展示所有的依赖，加入**--all**参数。
+
+展示反转的依赖（给定的单元被别的单元依赖），你可以添加**--reverse**参数，其他常用的参数**--before**和**--after**，可以用来分别展示在特性单元之前或之后运行的单元。
+
+##### 检查单元的属性 #####
+
+若要查看低一级的单元属性，你可以使用**show**命令。这将用**key==value**(键值对)形式列举出该单元的属性：
+
+```
+systemctl show sshd.service
+```
+
+```
+Id=sshd.service
+Names=sshd.service
+Requires=basic.target
+Wants=system.slice
+WantedBy=multi-user.target
+Conflicts=shutdown.target
+Before=shutdown.target multi-user.target
+After=syslog.target network.target auditd.service systemd-journald.socket basic.target system.slice
+Description=OpenSSH server daemon
+. . .
+```
+
+如果你想展示某个特定的属性，你可以使用**-p**参数并附带属性名称。例如,查看**sshd.service**单元的conflicts属性，你可以键入：
+
+```
+systemctl show sshd.service -p Conflicts
+```
+
+```
+Conflicts=shutdown.target
+```
+
+##### 标记和不标记单元 #####
+
+我们已经在服务管理部分知道如何去停止和关闭开机启动服务，但是**systemd**也有把单元标记为不论自动或手动都不可启动的能力，这是通过将该单元链接到**/dev/null**实现的。这被称为标记单元，可以用个**mask**命令来实现：
+
+```
+sudo systemctl mask nginx.service
+```
+
+这将阻止nginx服务被自动或手动启动，只要在其被标记的状态下。
+
+如果你查看**list-unit-files**，你将会看到该服务已经被标记为“masked”状态展示：
+
+```
+systemctl list-unit-files
+```
+
+```
+
+. . .
+kmod-static-nodes.service              static  
+ldconfig.service                       static  
+mandb.service                          static  
+messagebus.service                     static  
+nginx.service                          masked
+quotaon.service                        static  
+rc-local.service                       static  
+rdisc.service                          disabled
+rescue.service                         static
+. . .
+```
+
+如果你试图启动该服务，你将看到如下信息:
+
+```
+sudo systemctl start nginx.service
+```
+
+```
+Failed to start nginx.service: Unit nginx.service is masked.
+```
+
+若要解锁一个单元的标记机，让其可以被使用，简单的使用**unmask**即可：
+
+```
+sudo systemctl unmask nginx.service
+```
+
+这将是该单元返回到其被标记前的状态，被允许启动或开机自启。
+
+#### 编辑单元文件内容 ####
+
+关于单元文件的格式的讨论不在本教程范围内，如果你需要调整单元文件的内容可以使用**systemctl**提供了内置的修改或编辑单元文件的命令来完成。
+
+**edit**命令默认会打开当前的单元文件片段：
+
+```
+sudo systemctl edit nginx.service
+```
+
+这将打开一个空白的文件，该文件可以用白覆盖或添加单元中定义的指令。同时在**/etc/systemd/system**路径下，一个文件夹将会被创建，文件名是单元文件名附加**。d**.例如，对于**nginx.service**来说，一个名为**nginx.service.d**的文件夹将会被创建。
+
+在该文件夹内，名为**override.conf**的片段文件将会被创建。当单元被加载过，**systemd**将会在内存中将该重写片段和初始的单元文件合并起来。该片段中的指令的优先级高于初始单元文件中相应的指令。
+
+如果你想要编辑完成的单元文件而不是单元文件片段，你可以出入**--full**参数：
+
+```
+sudo systemctl edit --full nginx.service
+```
+
+这将会将当前的单元文件加载到编辑器，在那里可以被修改。当编辑器退出时，修改后的文件将会被存储到**/etc/systemd/system**，该文件将会被以比系统的单元定义（通常在**/lib/systemd/system）高的优先级被使用。
+
+如要删除任意的你创建的附加的或者单元的**.d**配置文件夹或者在**/etc/systemd/system**路径下的修改的文件。例如，删除片段，我们可以键入：
+
+
+
+
+
+
+
+
