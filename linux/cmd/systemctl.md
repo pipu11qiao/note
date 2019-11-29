@@ -130,6 +130,90 @@ systemctl is-failed application.service
 
 如果正常运行返回**active**，如果有错误返回**failed**。如果该单元被显式的停止，将会返回**unknown** 或 **inactive**。返回状态码”0“表示又失败发生而返回状态码“1”表示别的状态。
 
+#### 系统状态查看 ####
 
+到现在介绍的命令对于控制单个服务很有用，但是对于探查系统当前状态用处不大。有很多的**systemctl**命令来提供该信息。
 
+##### 列举当前单元 #####
+
+要查看当前**systemd**知道的所有的活动的单元列表，我们可以使用**list-units**命令：
+
+```
+systemctl list-units
+```
+
+这将会展示系统中**systemd**激活的所有的单元列表。输出会类似于这样：
+
+```
+UNIT                                      LOAD   ACTIVE SUB     DESCRIPTION
+atd.service                               loaded active running ATD daemon
+avahi-daemon.service                      loaded active running Avahi mDNS/DNS-SD Stack
+dbus.service                              loaded active running D-Bus System Message Bus
+dcron.service                             loaded active running Periodic Command Scheduler
+dkms.service                              loaded active exited  Dynamic Kernel Modules System
+getty@tty1.service                        loaded active running Getty on tty1
+. . .
+```
+输出中包含如下几列：
+
+* UNIT： **systemd**的单元名称
+* LOAD： 单元的配置是否被**systemd**解析，加载过的单元的配置保存在内存中
+* ACTIVE： 一个简要关于单元成否激活的状态信息，通常是相当基本的告知该单元是否成功的启动
+* SUB：这是低等级状态标识了该单元的更多的细节信息。这通常会根据单元类型，状态和单元运行的真是方法变化。
+* DESCIPTION： 一个简短的单元功能的文字描述
+
+因为**list-units**命令默认只展示激活的单元，上面所有的条目中的LOAD列都显示“loaded”和ACTIVE列都显示“active”，这些信息就是不带额外参数**systemctl**的默认展示行为，所以如果你不带参数的调用**systemctl**命令，你将看到同样的输出结果:
+
+```
+systemctl
+```
+
+我们可以通过添加额外的标志参数告知**systemctl**输出不同的信息。列如，查看**systemd**中所有加载的（或试图加载），不论是否被激活的单元，你可以使用**-all**参数，像这样：
+
+```
+systemctl list-units --all
+```
+
+这将会输出**systemd**加载的或试图去加载的单元，不考虑他们当前在系统中的状态。其中，一些单元在运行后变为非激活状态，一些**systemd**试图去加载的但是在硬盘中找不到的单元。
+
+你可以使用别的参数来过滤这些结果。例如，我们可以使用**--state**参数来标识LOAD、ACTIVE，或SUB状态中我们想要查看的。同时你需要保留**--all**参数来告知**systemctl**允许非激活状态的单元展示。
+
+```
+systemctl list-units --all --state=inactive
+```
+另外一个常用的过滤参数**--type=**.我们可以告知**systenctl**来展示我们感兴趣的类型的单元。例如，只查看激活的服务的单元，我们可以使用
+
+```
+systemctl list-units --type=service
+```
+
+##### 列举所有单元文件 #####
+
+**list-units**命令只展示哪些**systemd**试图解析和加载进内存的单元。因为**systemd**只会读取它认为他将需要的单元，这将不一定包含系统中所有可用的单元。要查看在**systemd**目录中每个可用的单元文件，包含哪些**systemd**没有试图加载的。你可以使用**list-unit-files**命令替代：
+
+```
+systemctl list-unit-files
+```
+
+单元是**systemd**知道的资源的集合。因为**systemd**不一定需要读取所有的定义信息，它只展示文件本身的基本信息。输出结果有两列： 单元文件名和状态
+
+```
+UNIT FILE                                  STATE   
+proc-sys-fs-binfmt_misc.automount          static  
+dev-hugepages.mount                        static  
+dev-mqueue.mount                           static  
+proc-fs-nfsd.mount                         static  
+proc-sys-fs-binfmt_misc.mount              static  
+sys-fs-fuse-connections.mount              static  
+sys-kernel-config.mount                    static  
+sys-kernel-debug.mount                     static  
+tmp.mount                                  static  
+var-lib-nfs-rpc_pipefs.mount               static  
+org.cups.cupsd.path                        enabled
+. . .
+```
+
+状态列通常为“enabled”,"disabled"，“static”，“masked”。在该语境下，静态表示该单元文件没有包含那些用来打开单元开机自启功能的安装部分代码，因此这些单元不能够这是开机自启。通常，这意味着改程扮演者一次性执行动作或仅被用来其他单元的依赖不能够单独运行的。
+
+我们将在涉及到时展开“masked”的解释。
 
