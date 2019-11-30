@@ -1,4 +1,4 @@
-## 如何使用systemctl命令来管理systemd的服务和资源(单元) ##
+## 如何使用systemctl命令来管理systemd的服务(Service)和资源(单元) ##
 
 ##### 介绍 #####
 
@@ -375,6 +375,123 @@ sudo systemctl edit --full nginx.service
 
 如要删除任意的你创建的附加的或者单元的**.d**配置文件夹或者在**/etc/systemd/system**路径下的修改的文件。例如，删除片段，我们可以键入：
 
+```
+sudo rm -r /etc/systemd/system/nginx.service.d
+```
+
+若要删除一个完整修改的单元文件，你将键入：
+
+```
+sudo rm /etc/systemd/system/nginx.service
+```
+
+在删除这些文件或文件夹后，你需要重载**systemd**进程，这样它就不会再引用这些文件，让它回溯使用原来系统给定文件。你可以通过键入如下信息来完成：
+
+```
+sudo systemctl daemon-reload
+```
+
+#### 通过目标（Targets)调整系统状态（运行等级） ####
+
+目标是一些特殊的单元文件，可以来描述系统状态或同步点。像其他的单元，定义目标的文件也可以通过后缀名被认出，对于目标文件来说是**.target**。目标本身不做很多功能，代之的是被用来整合其他的单元。
+
+这点可以用来使系统变成特定的状态，跟别的初始化系统中使用运行级别（runlevel)很相似。它们被用来当作当某个特定功能可用时的索引，可以让你直接指明想要的状态而不是通过一些需要的单独的单元来完成状态修改。
+
+例如，有个**swap.target**文件是用来标识交换（swap）功能可用的。那些是该进程的组成部分的需要目标文件同步加载单元，在其配置中以**WantedBy=**或**RequiredBy=**那个**swap.target**标识。而那些需要swap文件可用的单元文件在配置中可以使用**Wants=**，××Requires=**,和**After=××指令来说明他们之间的关系。
+
+##### 获取和设置默认的目标 #####
+
+**systemd**进程当启动系统时会使用默认的目标。完成那个目标文件的级联的依赖将会是系统进如所需的状态。若要查看系统中默认的目标，键入：
+
+```
+systemctl get-dafault
+```
+
+```
+multi-user.target
+```
+
+如果你想要设置一个不同的默认目标，你可以使用**set-default**。例如，你如果有个图形桌面安装目标，你希望系统将其作为默认的目标加载，你可以相应的改变系统默认的目标：
+
+```
+sydo systemctl set-default graphical.target
+```
+
+##### 列举可用的目标 #####
+
+你可以查看在系统中可用的目标列表，键入：
+
+```
+systemctl list-unit-files --type=target
+```
+
+不像运行级别，目标一次可以启动多个。一个激活的目标示意**systemd**重新试图启动所有跟该目标相关的单元并且没有试图将这些单元停止。要查看所有的活动目标，键入：
+
+```
+systemctl list-units --type=target
+```
+
+##### 隔离目标 #####
+
+启动一个目标中涉及的所有的单元，并且停止所有不再依赖树上的单元是可以的。想达到该目的的命令被称为，**isolate**。这类似去其他初始化系统中的改变运行级别。
+
+例如，你正在通过**graphical.target**激活来操作一个图形化系统，你可以使用隔离**multi-user.target**来关闭图形系统让系统进入多用户命令行状态。由于**graphical.target**依赖于**multi-user.target**但不包括其他的依赖，所以所有的图形单元会被关闭。
+
+在你要使用隔离功能隔离某个目标钱，你或许希望查看一下你要隔离的目标中所有的依赖来保证重要的依赖不被停止：
+
+```
+systemctl list-dependencies multi-user.target
+```
+
+当你认为这些单元仍被激活还满意的或，键入：
+
+```
+sudo systemctl isolate multi-user.target
+```
+
+##### 使用重要事件的快捷方式 #####
+
+有一些被定义用来服务与重要事件的目标如关机或重启。 然而，**systemd**也有一些添加了一些额外功能的快捷方式。
+
+例如，让系统计入安全模式（single-user)，你可以使用**rescue**命令代替**isolate rescue.target**
+
+```
+sudo systemctl rescue
+```
+
+这将产生额外的功能，提醒关于事件的用户日志。
+
+若想挂起系统，可以使用**halt**命令：
+
+```
+sudo systemctl halt
+```
+
+若要执行彻底的关机，使用**poweroff**命令：
+
+```
+sudo systemctl poweroff
+```
+
+重启是**reboot**命令：
+
+```
+sudo systemctl reboot
+```
+
+这些都会给提示普通用户不能使用该功能，这些提示是简单的运行和隔离目标不会给出的。注意大多数机器会将这些快捷方式转变成更加方便的使用方式。
+
+例如，重启系统，可以键入：
+
+```
+sudo reboot
+```
+
+#### 总结 ####
+
+到现在位置，你已经熟悉了一些**systemctl**的基本能力，用来允许你控制和使用**systemd**实例。该**systemctl**工具将会是你主要的服务控制和系统状态管理工具。
+
+然而**systemctl**操作主要是来操作**systemd**核心功能，还有别的**systemd**模块系统被别的工具来控制。 其它能力，像日志管理和用户对话被单独的守护进程和管理工具公职（**journald/journalctl ** 和 **logind/loginctl**). 花点时间来熟悉这些工具和守护进程，将会是管理系统变得很简单。
 
 
 
