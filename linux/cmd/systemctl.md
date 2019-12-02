@@ -443,7 +443,7 @@ systemctl list-units --type=target
 systemctl list-dependencies multi-user.target
 ```
 
-当你认为这些单元仍被激活还满意的或，键入：
+当你认为只有这些单元被激活可以满足需要，输入：
 
 ```
 sudo systemctl isolate multi-user.target
