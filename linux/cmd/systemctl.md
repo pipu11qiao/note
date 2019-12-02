@@ -77,6 +77,7 @@ sudo systemctl enable application.service
 ```
 sudo systemctl disable application.service
 ```
+
 这将会删除说明该程序是开机启动的符号链接。
 
 记住打开开机自启并不会在当前会话中启动服务，如果你既希望启动服务也想打开开机自启，你将必须**start**和**enable**命令调用。
