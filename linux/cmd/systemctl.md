@@ -1,4 +1,4 @@
-## 如何使用systemctl命令来管理systemd的服务(Service)和资源(单元) ##
+## (翻译)如何使用systemctl命令来管理systemd的服务(Service)和资源(单元) ##
 
 ##### 介绍 #####
 
@@ -494,8 +494,5 @@ sudo reboot
 然而**systemctl**操作主要是来操作**systemd**核心功能，还有别的**systemd**模块系统被别的工具来控制。 其它能力，像日志管理和用户对话被单独的守护进程和管理工具控制（**journald/journalctl ** 和 **logind/loginctl**). 花点时间来熟悉这些工具和守护进程，将会是管理系统变得很简单。
 
 
-
-
-
-
-
+#### 参考文章
+[How To Use Systemctl to Manage Systemd Services and Units](https://www.digitalocean.com/community/tutorials/how-to-use-systemctl-to-manage-systemd-services-and-units)
