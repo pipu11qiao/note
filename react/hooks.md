@@ -45,4 +45,13 @@ userContext  能让你不用通过嵌套调用来获得上下文
 userReducer 能让你使用reducer来管理本地的状态。
 
 
+#### 要点
+setState 需要用一个值或函数
+```javascript
+ const [state, setState] = useState({ left: 0, top: 0, });
+ setState(state => ({ ...state, left: e.pageX, top: e.pageY }));
+```
+
+
+
 
