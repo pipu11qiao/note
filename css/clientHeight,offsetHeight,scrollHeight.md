@@ -1,7 +1,7 @@
 clientHeight,offsetHeight,scrollHeigt 是元素三个与高度有关的属性，它们之间的区别是什么呢？
 
-![scrollHeight](https://s1.ax1x.com/2020/06/02/tYsA6H.png)
-![clientHeight,offsetHeight](https://s1.ax1x.com/2020/06/02/tYsJns.png)
+![tYsJns.png](https://s1.ax1x.com/2020/06/02/tYsJns.png)
+![tYsA6H.png](https://s1.ax1x.com/2020/06/02/tYsA6H.png)
 
 可以由上图看出：
 
