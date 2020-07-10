@@ -48,6 +48,14 @@ git config --global alias.ac '!git add -A && git commit -m'
 git checkout sourc_branch <paths>...
 ```
 
+#### 按提交时间的先后顺序查看分支
+
+```
+git branch --sort=-committerdate  # DESC
+git branch --sort=committerdate  # ASC
+```
+
+
 
 
 
