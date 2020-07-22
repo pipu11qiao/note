@@ -240,6 +240,12 @@ export default Page;
 
 ```
 
+#### contextTypes 过时的api 知道意思就行
+
+只要 contextTypes 被定义为函数的一个属性，函数组件也能够引用 context。下面的代码展示了一个函数组件写法的 Button 组件。
+
+项目中的context 作为构成store的api在使用
+
 
 
 
