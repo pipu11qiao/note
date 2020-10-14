@@ -30,7 +30,7 @@ publicPath解决
 #### 5. 公共资源
 
 * 第三方包使用dll+npm的方式，将dll文件发到npm，实际在build只是读取json文件，通过配置public_path来写入对应的静态dll文件地址（cdn),?打包成npm包的使用?后续的更新方式
-* 类似yq的文件,放置到avalon-common 的npm包？
+* 类似yq的文件,放置到avalon-common 的npm包 通过father插件来发布，对应的包
 
 #### 6. 代理,node服务
 
@@ -46,3 +46,14 @@ publicPath解决
 #### 8. 主应用和子应用的项目结构
 
 git submodule方式
+
+
+
+* avalon 
+    * 静态资源  模版路由 
+    * 配置子应用 路由验证
+* 子应用 dev
+    * 子应用 内部的路由 保证v/a 下的
+    * dev 子应用调子应用
+    * 子应用 用主应用的资源
+        * 公共资源 统一
