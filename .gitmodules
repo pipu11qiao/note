@@ -1,0 +1,3 @@
+[submodule "diagramBase/design-pattern-learn"]
+	path = diagramBase/design-pattern-learn
+	url = ./
