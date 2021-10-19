@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    function curry(fn) {
+        return function judge(...args) {
+            if (args.length < fn.length) {
+                debugger;
+                return (...nextArgs) => judge(...args, ...nextArgs);
+            } else {
+                return fn.apply(this, args);
+            }
+        }
+    }
+
+    function add(a, b, c, d) {
+        console.log(a, b, c, d)
+        return [...arguments]
+    }
+
+    let res = curry(add)(1)(2)(3)(4);
+    console.log(res);
+
+</script>
+</body>
+</html>
