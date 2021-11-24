@@ -19,5 +19,6 @@ setting -> command palette
 * 搜索功能 command + shift + p
 * 展开或关闭侧边栏 command + b
 * 格式化文档 command + shift + f 
+* 打开终端 Ctrl + ~
 
 
