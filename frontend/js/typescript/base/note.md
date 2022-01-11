@@ -49,7 +49,15 @@ let val: string | number | bollean = 2;
 
 访问联合类型的属性和方法，当不能确定具体类型时，只能访问联合类型的公有属性和方法
 
+##### ts 项目中使用第三方包
 
+先安装包
+> yarn add crypto-js
+如果有对应的type包,安装 types
+> yarn add  -D @types/crypto-js
+如果没有type包
+如果没有这个库的声明文件的话，我们需要手动声明这个库。查找项目中是否有以.d.ts结尾的文件；有的话，在文件中添加代码 declare module "第三方类库名";没有的话可以在src目录下新建一个types目录,然后在types 目录下新建一个 index.d.ts文件然后在文件中添加代码 declare module "第三方类库名"。
 
-
+> declare module 'rc-checkbox';
+这个bug就解决了，重启项目就可以了！
 

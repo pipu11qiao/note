@@ -6,3 +6,4 @@ df -h
 cat /proc/version 
 
 * 如果是redhat  cat /etc/redhat-release
+ 
