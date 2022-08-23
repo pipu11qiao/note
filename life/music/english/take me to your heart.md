@@ -80,3 +80,50 @@ Show me what love is - be my guiding star
 告诉我爱的真谛,做我的指路明灯
 It's easy take me to your heart
 一切都很简单,把我带进你的心吧
+
+
+
+
+hiding from the rain and snow
+trying to forget but I won't let it go
+looking at the crowded street
+listening to my own heart beat
+so many people all around the world
+tell me where do I find some one like you girl
+take me to heart,take me to your soul
+give me your hand before I'm old
+show me what love is - haven't got a clue
+show me that wonders can be true
+they say nothing lasts forefer
+we're only here tody
+love is now or never
+bring me far away
+take me to heart,take me to your soul,give me your hand and hold me 
+show me what love is, be my guiding star
+it's easy, take me to your heart
+
+
+-------------------------------------------------------
+
+standing on a mountain high
+looking at the moon through a clear blue sky
+I should go and see some friends
+but then don't really comprehend
+don't need to much talking without saying anything
+all I need is some one who makes me wanna sing
+take me to your heart take me to you soul
+give me your hand before I'm old
+show me what love is - haven't got a clue
+show me that wonders can be true(不同)
+they say nothing lasts forefer
+we're only here tody
+love is now or never
+bring me far away
+take me to heart,take me to your soul,give me your hand and hold me 
+show me what love is, be my guiding star
+it's easy, take me to your heart(不同)
+take me to heart,take me to your soul(不同),give me your hand and hold me 
+show me what love is, be my guiding star(不同)
+it's easy, take me to your heart
+
+
