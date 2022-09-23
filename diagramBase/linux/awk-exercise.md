@@ -28,3 +28,4 @@ root:x:0:0:root:/root:/bin/bash
 daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
 
 ```
+> awk -F : '{if($3==0){print "超级管理员: "$1}}{if($3 > 0 && $3 < 1000){print "系统管理员: "$1}}{if($3 > 1000){print "普通用户: " $1}}' /etc/passwd
