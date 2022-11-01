@@ -117,5 +117,6 @@ bbbbbb
 
 ```
 
+##### 7. 除了某些文件及 ##### 
 
-
+find Work -path */node_modules/* -prune -o -name 'deploy.sh' -print
