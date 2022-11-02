@@ -18,8 +18,8 @@ cms 项目，使用 react 开发,状态管理使用 mobx,UI 中使用了 materia
 
 ### 如何做
 
-一开始准备直接在项目添加 ts 支持，添加 ts 依赖，eslint 依赖，然后就是提示升级 node 版本，提升了 node 版本就是提 node-sass 不支持。折腾了一顿也没整明白。
-因为是 cra 创建的项目尝试以最新版的 cra 创建一个支持 ts 的项目，然后对项目进行更改
+一开始准备直接在项目添加 ts 支持，添加 ts 依赖，eslint 依赖，然后就是提示升级 node 版本，提升了 node 版本后提示 node-sass 不支持。折腾了一顿也没整明白。
+因为是 cra 创建的项目尝试以最新版的 cra 创建一个支持 ts 的项目，然后对项目进行相应更改
 
 ## 3. 升级实现以及遇到的问题
 
@@ -36,7 +36,7 @@ cms 项目，使用 react 开发,状态管理使用 mobx,UI 中使用了 materia
 
 运行 `yarn start`
 
-3. 用老项目的 src 替换新项目的 src，cra 的项目项目代码基本都在 src 中，我们可以把这个运行起来就 ok 了。
+3. 用老项目的 src 替换新项目的 src（将生成的src删掉，把原有项目的复制过来），cra 的项目项目代码基本都在 src 中，我们可以把这个运行起来就 ok 了。
 
 webapck 配置文件，位置在 config/webpack.config.js。
 
@@ -44,8 +44,11 @@ webapck 配置文件，位置在 config/webpack.config.js。
 
 > disableESLintPlugin = true
 
+![disable-eslint.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/1e46755a9e2843979a262b4dbbd42319~tplv-k3u1fbpfcp-watermark.image?)
 
 #### 问题 1. cra 项目不支持装饰器语法，需要进行支持,包括 babel 和 eslint 设置
+
+![decorator-error.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e56eacbcfba840aa859246d3d51207b3~tplv-k3u1fbpfcp-watermark.image?)
 
 babel 添加decorator支持
 添加插件@babel/plugin-proposal-decorators
@@ -73,6 +76,7 @@ babel 添加decorator支持
                 ].filter(Boolean),
 }
 ```
+![babel-decorator.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/85f05efe60dd4bd3b5bedba3b7dae446~tplv-k3u1fbpfcp-watermark.image?)
 
 5. 再次执行start可以看到babel的decorator提示已经解决，接下来
 
@@ -85,8 +89,9 @@ babel 添加decorator支持
 
 > import 'antd/dist/antd.min.css'
 
+![antd-error.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/296324ba7dff4934957fb3f0eea746f7~tplv-k3u1fbpfcp-watermark.image?)
 
-#### 问题 3. 此时start命令在终端已经不报错误了，但是访问页面没有内容,将和proxy代理配置相关的文件移除后可以访问页面 新的代理中使用方法和原来的不一样，[proxy设置](https://create-react-app.dev/docs/proxying-api-requests-in-development)
+#### 问题 3. 此时start命令在终端已经不报错误了，但是访问页面没有内容,将和proxy代理配置相关的文件移除后可以访问页面 新的代理中使用方法和原来的不一样，[新版proxy设置](https://create-react-app.dev/docs/proxying-api-requests-in-development)
 
 ```javascript
 const { createProxyMiddleware } = require("http-proxy-middleware");
@@ -117,6 +122,9 @@ module.exports = function (app) {
     "eslint.nodeEnv": "development",
 }
 ```
+
+![babel-preset-react-app-env-error.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/06eff019e13e4baf947780c1f4c2c12c~tplv-k3u1fbpfcp-watermark.image?)
+
 * 打开eslint的开关, disableESLintPlugin更改删掉。运行start，eslint报错没有decorators支持
 webpack5使用 [eslint-webpack-plugin](https://webpack.docschina.org/plugins/eslint-webpack-plugin/)
 将配置文件中的除了eslint-webpack-plugin中的配置移到.eslintrc.js文件中，不在配置文件中配置的原因是编辑器无法识别配置文件中的eslint配置
@@ -174,5 +182,20 @@ console.log(`baseAdd(1,2)`, baseAdd(1, 2));
 ```
 可以正常使用
 
+将原来的jsx直接修改成tsx文件，终端会有对应的ts编译的错误，也没有问题
+
 
 ## 4. 结语
+
+老的react项目如果是基于cra创建的在升级时优先考虑直接更新cra的版本，如果已经eject则直接用新版的cra的eject然后将src运行。
+最主要的升级工作还是在围绕webpacz做一些配置，优先保证项目运行起来，可以先关掉eslint。最后解决eslint问题。
+更好的实践是保持项目与新的技术的更新。
+
+前端的工程化是没有止尽的(因为没有官方支持!!，js语言更多关心的是ecma标准)，尽可能选择已有的前端解决方法，ice.js umi.js要比官方的cra好用的多，也会有更多的升级支持。
+
+
+## 5. 参考文档
+
+[EslintWebpackPlugin](https://webpack.docschina.org/plugins/eslint-webpack-plugin/)
+[Create React App](https://create-react-app.dev/)
+[webpack](https://webpack.js.org/)
