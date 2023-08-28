@@ -1,10 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Title</title>
-</head>
-<body>
-<script src="./test.js"></script>
-</body>
+  </head>
+  <body>
+    <!-- <script src="./test.js"></script> -->
+    <script>
+      console.log("sync", 1);
+      const raf = requestAnimationFrame(() => {
+        console.log("raf", 1);
+        cancelAnimationFrame(raf);
+      });
+      const timer = setTimeout(() => {
+        console.log("timeout", 1);
+      }, 10);
+      let i = 0;
+      while (i < 100000000) {
+        i++;
+      }
+      console.log("sync", i);
+    </script>
+  </body>
 </html>
